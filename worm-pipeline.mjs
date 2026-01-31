@@ -150,15 +150,9 @@ const final_sharp_image = sharp(final_byte_buffer, {
 	}
 });
 
-log_write('Encoding indexed PNG with transparency');
+log_write('Encoding full color PNG with transparency');
 final_sharp_image
-	.png({
-		palette: true,          // use an 8-bit palette
-		colors: 63,             // 63 visible colours + 1 transparent
-		dither: 1,              // Floyd-Steinberg
-		background: { r: 0, g: 0, b: 0, a: 0 }
-	})
-	.toFile(output_path, (err, info) => {
+	.png().toFile(output_path, (err, info) => {
 		if (err) {
 			console.error('Error writing PNG:', err);
 		} else {
