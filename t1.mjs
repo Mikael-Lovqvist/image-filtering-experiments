@@ -6,7 +6,7 @@ import { preview } from './preview.mjs';
 const image = sharp('/home/devilholk/Downloads/dragonmap-sample.png');
 const meta = await image.metadata();
 
-assert(meta.channels, 'Expected RGBA (4 channels)');
+assert(meta.channels === 4, 'Expected RGBA (4 channels)');
 
 const byte_buffer = await image.raw().toBuffer();
 const source_buffer = new Uint32Array(byte_buffer.buffer, byte_buffer.byteOffset, byte_buffer.byteLength >> 2);

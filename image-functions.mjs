@@ -329,3 +329,69 @@ export function masked_label_fill_expansion(mask_buffer, dest_buffer, width, hei
 
 }
 
+
+
+export function rgb_extract_clamped_square_value(source_buffer, width, height) {
+	const dest_buffer = new Uint8Array(width * height);
+
+	for (let y=0; y<height; y++) {
+		for (let x=0; x<width; x++) {
+			const i = width * y + x;
+			const R = source_buffer[i] & 0xFF;
+			const G = (source_buffer[i] >> 8) & 0xFF;
+			const B = (source_buffer[i] >> 16) & 0xFF;
+			const sq_sum = R ** 2 + G ** 2 + B ** 2;
+			dest_buffer[i] = Math.min(sq_sum, 0xFF);
+		}
+	}
+	return dest_buffer;
+}
+
+export function value_lt_threshold_8(source_buffer, width, height, threshold) {
+	const dest_buffer = new Uint8Array(width * height);
+
+	for (let y=0; y<height; y++) {
+		for (let x=0; x<width; x++) {
+			const i = width * y + x;
+			dest_buffer[i] = source_buffer[i] < threshold ? 255 : 0;
+		}
+	}
+	return dest_buffer;
+}
+
+export function value_gt_threshold_8(source_buffer, width, height, threshold) {
+	const dest_buffer = new Uint8Array(width * height);
+
+	for (let y=0; y<height; y++) {
+		for (let x=0; x<width; x++) {
+			const i = width * y + x;
+			dest_buffer[i] = source_buffer[i] > threshold ? 255 : 0;
+		}
+	}
+	return dest_buffer;
+}
+
+export function non_zero_label(source_buffer, width, height) {
+	const dest_buffer = new Uint8Array(width * height);
+
+	for (let y=0; y<height; y++) {
+		for (let x=0; x<width; x++) {
+			const i = width * y + x;
+			dest_buffer[i] = source_buffer[i] !== 0 ? 255 : 0;
+		}
+	}
+	return dest_buffer;
+}
+
+
+export function replace_alpha_with_mask(color_buffer, alpha_buffer, width, height) {
+	const dest_buffer = new Uint32Array(width * height);
+
+	for (let y=0; y<height; y++) {
+		for (let x=0; x<width; x++) {
+			const i = width * y + x;
+			dest_buffer[i] = color_buffer[i] & 0xFFFFFF | (alpha_buffer[i] << 24);
+		}
+	}
+	return dest_buffer;
+}
