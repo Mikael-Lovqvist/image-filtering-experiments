@@ -8,6 +8,8 @@ import * as IMOP from './image-functions.mjs';
 
 import { log_write } from './log.mjs';
 
+const island_pre_label_erosion = 10;
+
 assert(process.argv.length >= 4, 'Expected two positional arguments: <input_path> <output_path>');
 
 const input_path = process.argv[2];
@@ -36,8 +38,8 @@ const value_buffer = IMOP.rgb_extract_clamped_square_value(source_buffer, meta.w
 log_write('Thresholding intensity values to create initial mask');
 const mask = IMOP.value_gt_threshold_8(value_buffer, meta.width, meta.height, 200);
 
-log_write('Creating large disc erosion kernel (radius 10)');
-const erosion_kernel = IMOP.create_disc_kernel(10);
+log_write(`Creating large disc erosion kernel (radius ${island_pre_label_erosion})`);
+const erosion_kernel = IMOP.create_disc_kernel(island_pre_label_erosion);
 
 log_write('Applying erosion to remove small bright regions');
 const eroded_mask = IMOP.apply_erosion_kernel_1ch(mask, meta.width, meta.height, erosion_kernel);

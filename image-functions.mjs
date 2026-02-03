@@ -83,9 +83,7 @@ export function create_connected_labels_1ch(source_buffer, width, height) {
 		return false;
 	}
 
-	for (let it=0; it<10; it++) {
-		create_single_label();
-	}
+	while(create_single_label());
 
 	return { count: label_count, buffer: dest_buffer };
 
